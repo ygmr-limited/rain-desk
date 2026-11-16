@@ -121,15 +121,15 @@ jobs:
           sed -i -e "s/osx_minimum_system_version = \"[0-9]*.[0-9]*\"/osx_minimum_system_version = \"${MIN_MACOS_VERSION}\"/" Cargo.toml
           sed -i -e "s/MACOSX_DEPLOYMENT_TARGET = [0-9]*.[0-9]*;/MACOSX_DEPLOYMENT_TARGET = ${MIN_MACOS_VERSION};/" flutter/macos/Runner.xcodeproj/project.pbxproj
           echo "MACOSX_DEPLOYMENT_TARGET=${MIN_MACOS_VERSION}" >> "$GITHUB_ENV"
-          ./build.py --flutter --hwcodec --unix-file-copy-paste --screencapturekit
+          python3 ./build.py --flutter --hwcodec --unix-file-copy-paste --screencapturekit
 
       - name: Ad-hoc sign app
         # build.py copies `service` in after Xcode signs, which breaks the bundle seal.
+        # No hardened runtime: ad-hoc + runtime fails library validation for FlutterMacOS.
         run: |
-          bash ./.github/scripts/sign-macos-app.sh \
-            ./flutter/build/macos/Build/Products/Release/RainDesk.app \
-            - \
-            ./flutter/macos/Runner/Release.entitlements
+          APP=./flutter/build/macos/Build/Products/Release/RainDesk.app
+          codesign --force --deep --sign - --entitlements ./flutter/macos/Runner/Release.entitlements "$APP"
+          codesign --verify --deep --strict "$APP"
 
       - name: Create dmg
         run: |
