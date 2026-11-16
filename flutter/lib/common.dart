@@ -1615,6 +1615,8 @@ String translate(String name) {
 // sciter: Does not have the function, but it should be kept the same.
 bool option2bool(String option, String value) {
   bool res;
+  // RainDesk: tek kullanimlik parola varsayilan olarak yalniz rakam
+  if (option == kOptionAllowNumericOneTimePassword) return value != "N";
   if (option.startsWith("enable-")) {
     res = value != "N";
   } else if (option.startsWith("allow-") ||
@@ -1631,6 +1633,7 @@ bool option2bool(String option, String value) {
 
 String bool2option(String option, bool b) {
   String res;
+  if (option == kOptionAllowNumericOneTimePassword) return b ? 'Y' : 'N';
   if (option.startsWith('enable-') &&
       option != kOptionEnableUdpPunch &&
       option != kOptionEnableIpv6Punch &&
@@ -3771,10 +3774,7 @@ Color? disabledTextColor(BuildContext context, bool enabled) {
 }
 
 Widget loadPowered(BuildContext context) {
-  // RainDesk: ana ekranda "Powered by RustDesk" gosterilmez (AGPL atfi Hakkinda bolumunde kalir)
-  if (true || bind.mainGetBuildinOption(key: "hide-powered-by-me") == 'Y') {
-    return SizedBox.shrink();
-  }
+  // RainDesk: ana ekranda urun imzasi (RustDesk atfi Hakkinda bolumunde)
   return MouseRegion(
     cursor: SystemMouseCursors.click,
     child: GestureDetector(
@@ -3782,14 +3782,14 @@ Widget loadPowered(BuildContext context) {
         launchUrl(Uri.parse('https://raindesk.net'));
       },
       child: Opacity(
-          opacity: 0.5,
+          opacity: 0.6,
           child: Text(
-            translate("powered_by_me"),
+            'Bir Gökhan Yağmur ürünüdür · Ücretsizdir',
             overflow: TextOverflow.clip,
             style: Theme.of(context)
                 .textTheme
                 .bodySmall
-                ?.copyWith(fontSize: 9, decoration: TextDecoration.underline),
+                ?.copyWith(fontSize: 10),
           )),
     ),
   ).marginOnly(top: 6);

@@ -2923,6 +2923,10 @@ pub fn is_disable_installation() -> bool {
 // flutter: flutter/lib/common.dart -> option2bool()
 // sciter: Does not have the function, but it should be kept the same.
 pub fn option2bool(option: &str, value: &str) -> bool {
+    // RainDesk: tek kullanimlik parola varsayilan olarak yalniz rakam (kapatmak icin "N")
+    if option == keys::OPTION_ALLOW_NUMERNIC_ONE_TIME_PASSWORD {
+        return value != "N";
+    }
     if option.starts_with("enable-") {
         value != "N"
     } else if option.starts_with("allow-")

@@ -2643,7 +2643,7 @@ class _AboutState extends State<_About> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Copyright © ${DateTime.now().toString().substring(0, 4)} YGMR Danışmanlık Ltd. Şti.\nRainDesk, RustDesk (© Purslane Tech Pte. Ltd., AGPL-3.0) tabanlıdır.\nKaynak kodu: https://github.com/ygmr-limited/rain-desk\n$license',
+                            'Copyright © ${DateTime.now().toString().substring(0, 4)} YGMR Danışmanlık Ltd. Şti.\nRainDesk bir Gökhan Yağmur ürünüdür. Herkes faydalanabilsin diye ücretsiz yaptık.\nRainDesk, RustDesk (© Purslane Tech Pte. Ltd., AGPL-3.0) tabanlıdır.\nKaynak kodu: https://github.com/ygmr-limited/rain-desk\n$license',
                             style: const TextStyle(color: Colors.white),
                           ),
                           Text(

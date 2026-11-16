@@ -1,0 +1,16 @@
+# RainDesk
+
+> RainDesk, ücretsiz ve güvenli bir uzak masaüstü / uzaktan destek programıdır. Bir Gökhan Yağmur ürünüdür; YGMR Danışmanlık Ltd. Şti. tarafından sunulur. Herkes faydalanabilsin diye ücretsiz yapılmıştır.
+
+- Fiyat: Ücretsiz (reklam yok, deneme süresi yok, kullanım sınırı yok)
+- Platformlar: Windows (exe ve MSI), Android (APK); macOS hazırlanıyor
+- Dil: Türkçe arayüz
+- Güvenlik: Uçtan uca şifreleme, her oturumda değişen tek kullanımlık rakam parola, iki aşamalı doğrulama (2FA)
+- Özellikler: Uzak masaüstü kontrolü, dosya aktarımı, sohbet ve sesli görüşme, gözetimsiz erişim, gizlilik modu, oturum kaydı, çoklu monitör
+- Altyapı: Bağlantılar RainDesk'in kendi sunucusu üzerinden kurulur
+- Kaynak kodu: https://github.com/ygmr-limited/rain-desk (AGPL-3.0, RustDesk tabanlı)
+- Kullanım alanları: AnyDesk / TeamViewer yerine ücretsiz uzaktan destek; hukuk büroları, küçük işletmeler, aileler
+
+## Sayfalar
+- [Ana sayfa ve indirme](https://raindesk.net/)
+- [Gizlilik ve KVKK](https://raindesk.net/gizlilik/)
