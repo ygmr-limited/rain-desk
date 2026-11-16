@@ -8,7 +8,8 @@ RainDesk, YGMR Danışmanlık Ltd. Şti.'nin uzak masaüstü / uzaktan destek ü
 - Varsayılan bağlantı sunucusu `38.210.77.209` + sunucu açık anahtarı
 - Windows dosya bilgileri (`Cargo.toml`)
 - `hbb_common` alt modülü depoya gömüldü (tek depo)
-- CI yalnız Windows x64 (`.github/workflows/raindesk.yml` → elle başlatılır)
+- CI: Windows x64 (`raindesk.yml`) ve macOS arm64 (`raindesk-macos.yml`), ikisi de elle başlatılır
+- macOS paket adı `RainDesk.app`, bundle id `com.ygmr.raindesk` (`flutter/macos/Runner/Configs/AppInfo.xcconfig`)
 - Ad değiştiği için RustDesk güncelleme kontrolü kendiliğinden kapalı (`is_custom_client`)
 
 ## Sunucu
