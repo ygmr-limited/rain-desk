@@ -1,4 +1,4 @@
-name: HukukDesk Windows derleme
+name: RainDesk Windows derleme
 
 on:
   workflow_dispatch:
