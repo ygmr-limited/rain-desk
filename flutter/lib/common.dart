@@ -3771,7 +3771,8 @@ Color? disabledTextColor(BuildContext context, bool enabled) {
 }
 
 Widget loadPowered(BuildContext context) {
-  if (bind.mainGetBuildinOption(key: "hide-powered-by-me") == 'Y') {
+  // RainDesk: ana ekranda "Powered by RustDesk" gosterilmez (AGPL atfi Hakkinda bolumunde kalir)
+  if (true || bind.mainGetBuildinOption(key: "hide-powered-by-me") == 'Y') {
     return SizedBox.shrink();
   }
   return MouseRegion(
