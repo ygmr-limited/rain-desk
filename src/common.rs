@@ -1177,6 +1177,12 @@ fn process_software_update_check_response(bytes: Bytes) -> ResultType<()> {
 // Because the url is always `https://api.rustdesk.com/version/latest`.
 #[tokio::main(flavor = "current_thread")]
 pub async fn do_check_software_update() -> hbb_common::ResultType<()> {
+    // RainDesk: RustDesk guncelleme sunucusuna ASLA sorulmaz; aksi halde RainDesk'in
+    // uzerine orijinal RustDesk kurulabilir. Guncelleme bulunamadi sayilir.
+    if is_custom_client() {
+        *SOFTWARE_UPDATE_URL.lock().unwrap() = "".to_owned();
+        return Ok(());
+    }
     let (request, url) =
         hbb_common::version_check_request(hbb_common::VER_TYPE_RUSTDESK_CLIENT.to_string());
     let proxy_conf = Config::get_socks();
@@ -1308,7 +1314,8 @@ fn get_api_server_(api: String, custom: String) -> String {
             return format!("http://{}", s);
         }
     }
-    "https://admin.rustdesk.com".to_owned()
+    // RainDesk: veri RustDesk sunucularina degil, kendi yonetim sunucumuza gider (KVKK)
+    "https://raindesk.net".to_owned()
 }
 
 #[inline]
