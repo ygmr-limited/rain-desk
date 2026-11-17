@@ -511,6 +511,13 @@ pub fn check_ws(endpoint: &str) -> String {
         (true, endpoint_port + 2)
     };
 
+    // RainDesk: kendi sunucumuz IP ile tanimli; WebSocket modunda kapali portlar yerine
+    // her agda acik olan 443 uzerinden (nginx -> hbbs 21118 / hbbr 21119) baglan.
+    if endpoint_host == crate::config::RAINDESK_SERVER_IP {
+        let path = if relay { "/ws/relay" } else { "/ws/id" };
+        return format!("wss://{}{}", crate::config::RAINDESK_WS_HOST, path);
+    }
+
     let (address, is_domain) = if crate::is_ip_str(endpoint) {
         (format!("{}:{}", endpoint_host, dst_port), false)
     } else {

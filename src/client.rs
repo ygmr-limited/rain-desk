@@ -841,6 +841,15 @@ impl Client {
         } else if !contained {
             crate::refresh_rendezvous_server();
         }
+        // RainDesk: kimlik sunucusu portlari engelliyse ve 443 aciksa WebSocket (wss://raindesk.net) ile tekrar dene
+        if socket.is_err()
+            && !hbb_common::config::use_ws()
+            && hbb_common::socket_client::raindesk_443_reachable().await
+        {
+            log::warn!("RainDesk: kimlik sunucusuna dogrudan ulasilamadi, 443 (WebSocket) deneniyor");
+            hbb_common::config::AUTO_WS.store(true, std::sync::atomic::Ordering::Relaxed);
+            socket = connect_tcp(&*rendezvous_server, CONNECT_TIMEOUT).await;
+        }
         log::info!("rendezvous server: {}", rendezvous_server);
         let mut socket = socket?;
         let mut my_addr = socket.local_addr();

@@ -114,6 +114,9 @@ const CHARS: &[char] = &[
 ];
 
 pub const RENDEZVOUS_SERVERS: &[&str] = &["38.210.77.209"];
+/// RainDesk: sunucu IP (kimlik/aktarma) ve 443 uzerinden WebSocket icin alan adi
+pub const RAINDESK_SERVER_IP: &str = "38.210.77.209";
+pub const RAINDESK_WS_HOST: &str = "raindesk.net";
 pub const RS_PUB_KEY: &str = "q6CGSJb3mMI4TIRi1PosV1Ff8pA6i3ATbRKMHpR61Hc=";
 
 pub const RENDEZVOUS_PORT: i32 = 21116;
@@ -2940,7 +2943,14 @@ pub fn option2bool(option: &str, value: &str) -> bool {
     }
 }
 
+/// RainDesk: kimlik sunucusunun portlari (21116 UDP/TCP) engelli ama 443 acik bir agda
+/// bu oturum icin otomatik olarak WebSocket (wss://raindesk.net) kullanilir. Kalici ayar degildir.
+pub static AUTO_WS: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
 pub fn use_ws() -> bool {
+    if AUTO_WS.load(std::sync::atomic::Ordering::Relaxed) {
+        return true;
+    }
     let option = keys::OPTION_ALLOW_WEBSOCKET;
     option2bool(option, &Config::get_option(option))
 }

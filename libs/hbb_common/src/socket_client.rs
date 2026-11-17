@@ -369,3 +369,16 @@ mod tests {
         assert_eq!(increase_port("z1:2", 1), "z1:3");
     }
 }
+
+/// RainDesk: raindesk.net:443'e TCP ile ulasilabiliyor mu? (Internet var ama RainDesk portlari mi engelli?)
+pub async fn raindesk_443_reachable() -> bool {
+    let addr = format!("{}:443", crate::config::RAINDESK_WS_HOST);
+    matches!(
+        tokio::time::timeout(
+            std::time::Duration::from_secs(5),
+            tokio::net::TcpStream::connect(addr),
+        )
+        .await,
+        Ok(Ok(_))
+    )
+}

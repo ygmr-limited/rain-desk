@@ -301,6 +301,8 @@ pub struct RendezvousMediator {
     keep_alive: i32,
 }
 
+
+
 impl RendezvousMediator {
     pub fn restart() {
         SHOULD_EXIT.store(true, Ordering::SeqCst);
@@ -497,6 +499,17 @@ impl RendezvousMediator {
                     if timeout || (last_register_sent.is_none() && expired) {
                         if timeout {
                             fails += 1;
+                            // RainDesk: sunucudan hic yanit alinamadiysa ve 443 aciksa bu ag RainDesk
+                            // portlarini engelliyordur; oturum boyunca 443 uzerinden WebSocket'e gec.
+                            if fails >= MAX_FAILS2
+                                && last_register_resp.is_none()
+                                && !hbb_common::config::AUTO_WS.load(Ordering::Relaxed)
+                                && hbb_common::socket_client::raindesk_443_reachable().await
+                            {
+                                log::warn!("RainDesk: kimlik sunucusu portlari erisilemiyor, 443 (WebSocket) uzerinden baglaniliyor");
+                                hbb_common::config::AUTO_WS.store(true, Ordering::Relaxed);
+                                bail!("RainDesk: WebSocket'e geciliyor");
+                            }
                             if fails >= MAX_FAILS2 {
                                 Config::update_latency(&host, -1);
                                 old_latency = 0;
