@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/common/widgets/animated_rotation_widget.dart';
 import 'package:flutter_hbb/common/widgets/custom_password.dart';
+import 'package:flutter_hbb/common/widgets/dialog.dart';
 import 'package:flutter_hbb/consts.dart';
 import 'package:flutter_hbb/desktop/pages/connection_page.dart';
 import 'package:flutter_hbb/desktop/pages/desktop_setting_page.dart';
@@ -49,6 +50,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   var watchIsCanRecordAudio = false;
   Timer? _updateTimer;
   bool isCardClosed = false;
+  final RxBool _permanentPasswordSet = false.obs;
 
   final RxBool _editHover = false.obs;
   final RxBool _block = false.obs;
@@ -92,6 +94,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       buildTip(context),
       if (!isOutgoingOnly) buildIDBoard(context),
       if (!isOutgoingOnly) buildPasswordBoard(context),
+      if (!isOutgoingOnly) buildUnattendedAccess(context),
       FutureBuilder<Widget>(
         future: Future.value(
             Obx(() => buildHelpCards(stateGlobal.updateUrl.value))),
@@ -376,6 +379,109 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                           onHover: (value) => editHover.value = value,
                         ),
                     ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _refreshPermanentPasswordSet() async {
+    if (bind.isOutgoingOnly()) return;
+    final v =
+        (await bind.mainGetCommon(key: "permanent-password-set")) == "true";
+    if (v != _permanentPasswordSet.value) {
+      _permanentPasswordSet.value = v;
+    }
+  }
+
+  void _showUnattendedPasswordDialog() {
+    setPasswordDialog(notEmptyCallback: () async {
+      final model = gFFI.serverModel;
+      if (model.approveMode == 'click' && !isOptionFixed(kOptionApproveMode)) {
+        await model.setApproveMode(defaultOptionApproveMode);
+      }
+      if (model.verificationMethod == kUseTemporaryPassword &&
+          !isOptionFixed(kOptionVerificationMethod)) {
+        await model.setVerificationMethod(kUseBothPasswords);
+      }
+      await model.updatePasswordModel();
+      await _refreshPermanentPasswordSet();
+    });
+  }
+
+  Future<void> _openUnattendedAccess() async {
+    // An installed copy keeps its security settings behind the same unlock as
+    // the settings page, so a standard user cannot open the machine up.
+    if (bind.mainIsInstalled()) {
+      final unlockPin = bind.mainGetUnlockPin();
+      if (unlockPin.isNotEmpty && !isUnlockPinDisabled()) {
+        checkUnlockPinDialog(unlockPin, _showUnattendedPasswordDialog);
+        return;
+      }
+      if (!await callMainCheckSuperUserPermission()) return;
+    }
+    _showUnattendedPasswordDialog();
+  }
+
+  Widget buildUnattendedAccess(BuildContext context) {
+    if (isChangePermanentPasswordDisabled() || bind.isDisableSettings()) {
+      return const SizedBox();
+    }
+    final textColor = Theme.of(context).textTheme.titleLarge?.color;
+    return Container(
+      margin: const EdgeInsets.only(left: 20.0, right: 16, bottom: 13),
+      child: Row(
+        children: [
+          Container(
+            width: 2,
+            height: 44,
+            decoration: BoxDecoration(color: MyTheme.accent),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 7),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AutoSizeText(
+                    translate("Unattended access"),
+                    style: TextStyle(
+                        fontSize: 14, color: textColor?.withOpacity(0.5)),
+                    maxLines: 1,
+                  ),
+                  const SizedBox(height: 6),
+                  Tooltip(
+                    message: translate('unattended_access_tip'),
+                    child: InkWell(
+                      onTap: _openUnattendedAccess,
+                      child: Obx(() => Row(
+                            children: [
+                              Icon(
+                                _permanentPasswordSet.value
+                                    ? Icons.lock_outline
+                                    : Icons.key,
+                                size: 16,
+                                color: MyTheme.accent,
+                              ),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: AutoSizeText(
+                                  translate(_permanentPasswordSet.value
+                                      ? 'Permanent password is set'
+                                      : 'Set permanent password'),
+                                  style: TextStyle(
+                                      fontSize: 14, color: MyTheme.accent),
+                                  maxLines: 1,
+                                  minFontSize: 10,
+                                ),
+                              ),
+                            ],
+                          )),
+                    ),
                   ),
                 ],
               ),
@@ -711,6 +817,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         svcStopped.value = v;
         setState(() {});
       }
+      await _refreshPermanentPasswordSet();
       if (watchIsCanScreenRecording) {
         if (bind.mainIsCanScreenRecording(prompt: false)) {
           watchIsCanScreenRecording = false;

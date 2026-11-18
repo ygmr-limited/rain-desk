@@ -826,5 +826,8 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("install-directory-not-empty-tip", "Seçilen klasör boş değil. Kurulum mevcut verileri silebilir. Farklı bir klasör seçmeyi düşünün."),
         ("Request approval", "Onay iste"),
         ("Forever", "Sonsuza dek"),
+        ("Unattended access", "Gözetimsiz erişim"),
+        ("unattended_access_tip", "Kalıcı parola belirleyin; karşıda kimse onay vermeden bu bilgisayara istediğiniz zaman bağlanın. Parolayı yalnız güvendiğiniz kişilerle paylaşın."),
+        ("Permanent password is set", "Kalıcı parola ayarlı"),
     ].iter().cloned().collect();
 }
