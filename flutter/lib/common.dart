@@ -167,7 +167,7 @@ class ColorThemeExtension extends ThemeExtension<ColorThemeExtension> {
   final Color? divider;
 
   static final light = ColorThemeExtension(
-    border: Color(0xFFCCCCCC),
+    border: Color(0xFFCBD5E1),
     border2: Color(0xFFBBBBBB),
     border3: Colors.black26,
     highlight: Color(0xFFE5E5E5),
@@ -248,17 +248,17 @@ class ColorThemeExtension extends ThemeExtension<ColorThemeExtension> {
 class MyTheme {
   MyTheme._();
 
-  static const Color grayBg = Color(0xFFEFEFF2);
-  static const Color accent = Color(0xFF0071FF);
-  static const Color accent50 = Color(0x770071FF);
-  static const Color accent80 = Color(0xAA0071FF);
+  static const Color grayBg = Color(0xFFEEF2F7);
+  static const Color accent = Color(0xFF24377F);
+  static const Color accent50 = Color(0x7724377F);
+  static const Color accent80 = Color(0xAA24377F);
   static const Color canvasColor = Color(0xFF212121);
   static const Color border = Color(0xFFCCCCCC);
-  static const Color idColor = Color(0xFF00B6F0);
+  static const Color idColor = Color(0xFF24377F);
   static const Color darkGray = Color.fromARGB(255, 148, 148, 148);
   static const Color cmIdColor = Color(0xFF21790B);
   static const Color dark = Colors.black87;
-  static const Color button = Color(0xFF2C8CFF);
+  static const Color button = Color(0xFF24377F);
   static const Color hoverBorder = Color(0xFF999999);
 
   // ListTile
@@ -372,8 +372,9 @@ class MyTheme {
   static ThemeData lightTheme = ThemeData(
     // https://stackoverflow.com/questions/77537315/after-upgrading-to-flutter-3-16-the-app-bar-background-color-button-size-and
     useMaterial3: false,
+    fontFamily: 'Roboto',
     brightness: Brightness.light,
-    hoverColor: Color.fromARGB(255, 224, 224, 224),
+    hoverColor: Color(0xFFEEF2F7),
     scaffoldBackgroundColor: Colors.white,
     dialogBackgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
@@ -401,11 +402,16 @@ class MyTheme {
           )
         : null,
     textTheme: const TextTheme(
-        titleLarge: TextStyle(fontSize: 19, color: Colors.black87),
-        titleSmall: TextStyle(fontSize: 14, color: Colors.black87),
-        bodySmall: TextStyle(fontSize: 12, color: Colors.black87, height: 1.25),
+        titleLarge: TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w500,
+            fontSize: 19,
+            color: Color(0xFF1B2A63)),
+        titleSmall: TextStyle(fontSize: 14, color: Color(0xFF1E293B)),
+        bodySmall:
+            TextStyle(fontSize: 12, color: Color(0xFF1E293B), height: 1.25),
         bodyMedium:
-            TextStyle(fontSize: 14, color: Colors.black87, height: 1.25),
+            TextStyle(fontSize: 14, color: Color(0xFF1E293B), height: 1.25),
         labelLarge: TextStyle(fontSize: 16.0, color: MyTheme.accent80)),
     cardColor: grayBg,
     hintColor: Color(0xFFAAAAAA),
@@ -452,7 +458,7 @@ class MyTheme {
         style:
             MenuStyle(backgroundColor: MaterialStatePropertyAll(Colors.white))),
     colorScheme: ColorScheme.light(
-        primary: Colors.blue, secondary: accent, background: grayBg),
+        primary: accent, secondary: accent, background: Color(0xFFF8FAFC)),
     popupMenuTheme: PopupMenuThemeData(
         color: Colors.white,
         shape: RoundedRectangleBorder(
@@ -470,10 +476,11 @@ class MyTheme {
   );
   static ThemeData darkTheme = ThemeData(
     useMaterial3: false,
+    fontFamily: 'Roboto',
     brightness: Brightness.dark,
-    hoverColor: Color.fromARGB(255, 45, 46, 53),
-    scaffoldBackgroundColor: Color(0xFF18191E),
-    dialogBackgroundColor: Color(0xFF18191E),
+    hoverColor: Color(0xFF243056),
+    scaffoldBackgroundColor: Color(0xFF111833),
+    dialogBackgroundColor: Color(0xFF111833),
     appBarTheme: AppBarTheme(
       shadowColor: Colors.transparent,
     ),
@@ -483,14 +490,14 @@ class MyTheme {
         borderRadius: BorderRadius.circular(18.0),
         side: BorderSide(
           width: 1,
-          color: Color(0xFF24252B),
+          color: Color(0xFF1B2547),
         ),
       ),
     ),
     scrollbarTheme: scrollbarThemeDark,
     inputDecorationTheme: (isDesktop || isWebDesktop)
         ? InputDecorationTheme(
-            fillColor: Color(0xFF24252B),
+            fillColor: Color(0xFF1B2547),
             filled: true,
             isDense: true,
             border: OutlineInputBorder(
@@ -499,7 +506,8 @@ class MyTheme {
           )
         : null,
     textTheme: const TextTheme(
-      titleLarge: TextStyle(fontSize: 19),
+      titleLarge: TextStyle(
+          fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 19),
       titleSmall: TextStyle(fontSize: 14),
       bodySmall: TextStyle(fontSize: 12, height: 1.25),
       bodyMedium: TextStyle(fontSize: 14, height: 1.25),
@@ -509,7 +517,7 @@ class MyTheme {
         color: accent80,
       ),
     ),
-    cardColor: Color(0xFF24252B),
+    cardColor: Color(0xFF1B2547),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     tabBarTheme: const TabBarTheme(
       labelColor: Colors.white70,
@@ -543,7 +551,7 @@ class MyTheme {
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        backgroundColor: Color(0xFF24252B),
+        backgroundColor: Color(0xFF1B2547),
         side: BorderSide(color: Colors.white12, width: 0.5),
         disabledForegroundColor: Colors.white70,
         foregroundColor: Colors.white70,
@@ -558,11 +566,11 @@ class MyTheme {
     listTileTheme: listTileTheme,
     menuBarTheme: MenuBarThemeData(
         style: MenuStyle(
-            backgroundColor: MaterialStatePropertyAll(Color(0xFF121212)))),
+            backgroundColor: MaterialStatePropertyAll(Color(0xFF111833)))),
     colorScheme: ColorScheme.dark(
-      primary: Colors.blue,
-      secondary: accent,
-      background: Color(0xFF24252B),
+      primary: Color(0xFF6E86E0),
+      secondary: Color(0xFF6E86E0),
+      background: Color(0xFF18213F),
     ),
     popupMenuTheme: PopupMenuThemeData(
         shape: RoundedRectangleBorder(
@@ -624,8 +632,11 @@ class MyTheme {
         return ThemeMode.light;
       case "dark":
         return ThemeMode.dark;
-      default:
+      case "system":
         return ThemeMode.system;
+      default:
+        // RainDesk: HukukPlus gibi varsayilan acik tema
+        return ThemeMode.light;
     }
   }
 }
@@ -1321,7 +1332,7 @@ Color? _msgboxColor(String type) {
   if (type.contains("error") || type == "re-input-password") {
     return Color(0xFFE04F5F);
   }
-  return Color(0xFF2C8CFF);
+  return Color(0xFF24377F);
 }
 
 Widget msgboxIcon(String type) {
@@ -1409,8 +1420,11 @@ Color str2color(String str, [alpha = 0xFF]) {
   for (var i = 0; i < str.length; i += 1) {
     hash = str.codeUnitAt(i) + ((hash << 5) - hash);
   }
-  hash = hash % 16777216;
-  return Color((hash & 0xFF7FFF) | (alpha << 24));
+  // RainDesk: kartlar HukukPlus paletinden renk alir
+  const palette = [
+    0x24377F, 0x1B3B73, 0x0D9488, 0x16A34A, 0xD9822B, 0x1B2A63, 0x3B5BA9, 0x7C5CBF
+  ];
+  return Color(palette[hash.abs() % palette.length] | (alpha << 24));
 }
 
 Color str2color2(String str, {List<int> existing = const []}) {
@@ -4026,7 +4040,7 @@ bool get isCustomClient {
 }
 
 get defaultOptionLang => isCustomClient ? 'default' : '';
-get defaultOptionTheme => isCustomClient ? 'system' : '';
+get defaultOptionTheme => 'system';
 get defaultOptionYes => isCustomClient ? 'Y' : '';
 get defaultOptionNo => isCustomClient ? 'N' : '';
 get defaultOptionWhitelist => isCustomClient ? ',' : '';
