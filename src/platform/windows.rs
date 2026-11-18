@@ -4123,6 +4123,57 @@ fn run_after_run_cmds(silent: bool) {
     std::thread::sleep(std::time::Duration::from_millis(300));
 }
 
+const OPTION_PORTABLE_DESKTOP_SHORTCUT: &str = "portable-desktop-shortcut";
+
+// The portable download has no installer, so its first run puts a shortcut on the
+// user's desktop. The option remembers it, so a shortcut the user deleted is not
+// recreated, and an installed copy removes it instead of showing two icons.
+pub fn sync_portable_desktop_shortcut() {
+    std::thread::spawn(|| {
+        if let Err(err) = sync_portable_desktop_shortcut_() {
+            log::warn!("Failed to sync portable desktop shortcut: {}", err);
+        }
+    });
+}
+
+fn sync_portable_desktop_shortcut_() -> ResultType<()> {
+    use windows::Win32::UI::Shell::{FOLDERID_Desktop, FOLDERID_PublicDesktop};
+
+    let created = config::LocalConfig::get_option(OPTION_PORTABLE_DESKTOP_SHORTCUT) == "Y";
+    let filename = format!("{}.lnk", crate::get_app_name());
+    let shortcut = installer_shell::get_known_folder(&FOLDERID_Desktop)?.join(&filename);
+    if is_installed() {
+        if created {
+            if shortcut.is_file() {
+                std::fs::remove_file(&shortcut)?;
+            }
+            config::LocalConfig::set_option(
+                OPTION_PORTABLE_DESKTOP_SHORTCUT.to_owned(),
+                "".to_owned(),
+            );
+        }
+        return Ok(());
+    }
+    if created {
+        return Ok(());
+    }
+    let has_public_shortcut = installer_shell::get_known_folder(&FOLDERID_PublicDesktop)
+        .map(|dir| dir.join(&filename).exists())
+        .unwrap_or(false);
+    if !shortcut.exists() && !has_public_shortcut {
+        let exe = std::env::current_exe()?;
+        let Some(exe) = exe.to_str() else {
+            bail!("Executable path is not valid Unicode: {:?}", exe);
+        };
+        std::fs::write(&shortcut, shortcut_bytes(exe, None, None)?)?;
+        config::LocalConfig::set_option(
+            OPTION_PORTABLE_DESKTOP_SHORTCUT.to_owned(),
+            "Y".to_owned(),
+        );
+    }
+    Ok(())
+}
+
 #[inline]
 pub fn try_remove_temp_update_files() {
     let temp_dir = std::env::temp_dir();

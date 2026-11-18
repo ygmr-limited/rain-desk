@@ -214,6 +214,7 @@ pub fn core_main() -> Option<CoreMainAction> {
         #[cfg(windows)]
         {
             crate::platform::try_remove_temp_update_files();
+            crate::platform::sync_portable_desktop_shortcut();
             hbb_common::config::PeerConfig::preload_peers();
         }
         std::thread::spawn(move || crate::start_server(false, no_server));
