@@ -405,7 +405,7 @@ class MyTheme {
         titleLarge: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
-            fontSize: 19,
+            fontSize: 17,
             color: Color(0xFF1B2A63)),
         titleSmall: TextStyle(fontSize: 14, color: Color(0xFF1E293B)),
         bodySmall:
@@ -507,7 +507,7 @@ class MyTheme {
         : null,
     textTheme: const TextTheme(
       titleLarge: TextStyle(
-          fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 19),
+          fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 17),
       titleSmall: TextStyle(fontSize: 14),
       bodySmall: TextStyle(fontSize: 12, height: 1.25),
       bodyMedium: TextStyle(fontSize: 14, height: 1.25),
@@ -1424,7 +1424,7 @@ Color str2color(String str, [alpha = 0xFF]) {
   const palette = [
     0x24377F, 0x1B3B73, 0x0D9488, 0x16A34A, 0xD9822B, 0x1B2A63, 0x3B5BA9, 0x7C5CBF
   ];
-  return Color(palette[hash.abs() % palette.length] | (alpha << 24));
+  return Color(palette[hash.abs() % palette.length] | (0xFF << 24));
 }
 
 Color str2color2(String str, {List<int> existing = const []}) {
